@@ -10,7 +10,7 @@ class db {
 
 
     }
-    createEmploee() {
+    createEmploees() {
         console.log("Inserting a new employee...\n");
         return this.connection.query(
             "INSERT INTO employee SET ?", employee
