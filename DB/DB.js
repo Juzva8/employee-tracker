@@ -17,27 +17,26 @@ class db {
 
         );
     }
-    roles() {
-        return this.connection.query("SELECT roles.title, roles.salary, roles.category, roles.role_id, roles.manager_id FROM role")
+    role() {
+        return this.connection.query("SELECT role.title, role.salary, role.category, role.role_id, role.manager_id FROM role")
 
 
     }
-    createRoles() {
-        console.log("Inserting a new roles...\n");
+    createRole() {
+        console.log("Inserting a new role...\n");
         return this.connection.query(
-            "INSERT INTO roles SET ?", roles
+            "INSERT INTO role SET ?", role
 
         );
     }
     department() {
         return this.connection.query("SELECT department.name FROM department")
 
-
     }
     createdepartment() {
         console.log("Inserting a new department...\n");
         return this.connection.query(
-            "INSERT INTO roles SET ?", department
+            "INSERT INTO role SET ?", department
 
         );
     }

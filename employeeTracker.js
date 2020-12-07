@@ -13,13 +13,13 @@ async function start() {
         choices: [
 
             {
-                name: "Add departments",
-                value: "departments"
+                name: "Add department",
+                value: "department"
             },
 
             {
-                name: "Add roles",
-                value: "roles"
+                name: "Add role",
+                value: "role"
             },
 
             {
@@ -27,13 +27,13 @@ async function start() {
                 value: "employees"
             },
             {
-                name: "View departments",
-                value: "view_departments"
+                name: "View department",
+                value: "view_department"
             },
 
             {
-                name: "View roles",
-                value: "view_roles"
+                name: "View role",
+                value: "view_role"
             },
             {
                 name: "View employees",
@@ -41,8 +41,8 @@ async function start() {
             },
 
             {
-                name: "Update employees roles",
-                value: "update_roles"
+                name: "Update employees role",
+                value: "update_role"
             },
             {
                 name: "Exit",
@@ -54,24 +54,24 @@ async function start() {
 
     // .then(function(answer) {
     switch (answer) {
-        case "departments":
-            return addDepartments();
+        case "department":
+            return addDepartment();
 
 
-        case "roles":
-            return addRoles();
+        case "role":
+            return addRole();
 
 
         case "employees":
             return addEmployees();
 
 
-        case "View_departments":
-            return viewDepartments();
+        case "View_department":
+            return viewDepartment();
 
 
-        case "view_roles":
-            return viewRoles();
+        case "view_role":
+            return viewRole();
 
 
 
@@ -80,42 +80,43 @@ async function start() {
 
 
 
-        case "update_roles":
-            return updateRoles();
+        case "update_role":
+            return updateRole();
 
 
-            //case "exit":
-            //    connection.end();
-            //   break;
+        case "exit":
+            connection.end();
+            break;
     }
-}
-//);
+};
 
-//}
-
-function viewDepartments() {
-    const department = db.department()
+async function viewDepartment() {
+    const department = await db.department()
+    console.log("\n")
     console.table(department)
 }
 
 
-function viewRoles() {
-    const roles = db.roles()
-    console.table(roles)
+async function viewRole() {
+    // try {
+    const role = await db.role()
+    console.log("\n")
+    console.table(role)
+        // } catch (err) {
+        // console.error(err)
+        // }
 
 }
 
 async function viewEmployees() {
-    console.log("WOOO")
+
     const employees = await db.employees()
     console.log("\n")
     console.table(employees)
 
-    //start();
-
 }
 
-function addDepartments() {
+function addDepartment() {
     inquirer
         .prompt([{
             name: "DepartmentName",
@@ -123,11 +124,9 @@ function addDepartments() {
             message: "What is the Department Name that you would like to add?"
         }, ])
         .then(function(answer) {
-
             connection.query(
                 "INSERT INTO department SET ?", {
                     department: answer.DepartmentName,
-
                 },
                 function(err) {
                     if (err) throw err;
@@ -138,7 +137,7 @@ function addDepartments() {
         });
 }
 
-function addRoles() {
+function addRole() {
     inquirer
         .prompt([{
                 name: "Title",
@@ -174,7 +173,7 @@ function addRoles() {
         ])
         .then(function(answer) {
             connection.query(
-                "INSERT INTO auctions SET ?", {
+                "INSERT INTO role SET ?", {
                     title: answer.title,
                     salary: answer.salary,
                     category: answer.category,
@@ -222,7 +221,7 @@ function addEmployees() {
         ])
         .then(function(answer) {
             connection.query(
-                "INSERT INTO auctions SET ?", {
+                "INSERT INTO employees SET ?", {
                     first_name: answer.first_name,
                     last_name: answer.last_name,
                     category: answer.category,
