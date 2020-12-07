@@ -5,20 +5,20 @@ class db {
         this.connection = connection;
     }
 
-    emploees() {
-        return this.connection.query("SELECT employee.first_name, employee.last_name, employee.category, employee.department_id")
+    employees() {
+        return this.connection.query("SELECT employees.first_name, employees.last_name, employees.category, employees.department_id FROM employees")
 
 
     }
-    createEmploees() {
-        console.log("Inserting a new employee...\n");
+    createEmployees() {
+        console.log("Inserting a new employees...\n");
         return this.connection.query(
-            "INSERT INTO employee SET ?", employee
+            "INSERT INTO employees SET ?", employees
 
         );
     }
     roles() {
-        return this.connection.query("SELECT roles.title, roles.salary, roles.category, roles.role_id, roles.manager_id")
+        return this.connection.query("SELECT roles.title, roles.salary, roles.category, roles.role_id, roles.manager_id FROM role")
 
 
     }
@@ -30,7 +30,7 @@ class db {
         );
     }
     department() {
-        return this.connection.query("SELECT department.name")
+        return this.connection.query("SELECT department.name FROM department")
 
 
     }

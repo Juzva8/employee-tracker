@@ -1,97 +1,97 @@
 var mysql = require("mysql");
-var inquirer = require("inquirer");
+var { prompt } = require("inquirer");
 var db = require("./DB/DB");
 require("console.table");
 
 start()
 
-function start() {
-    inquirer
-        .prompt({
-            name: "action",
-            type: "list",
-            message: "What would you like to do?",
-            choices: [
+async function start() {
+    const { answer } = await prompt([{
+        name: "answer",
+        type: "list",
+        message: "What would you like to do?",
+        choices: [
 
-                {
-                    name: "Add departments",
-                    value: "departments"
-                },
+            {
+                name: "Add departments",
+                value: "departments"
+            },
 
-                {
-                    name: "Add roles",
-                    value: "roles"
-                },
+            {
+                name: "Add roles",
+                value: "roles"
+            },
 
-                {
-                    name: "Add employees",
-                    value: "employees"
-                },
-                {
-                    name: "View departments",
-                    value: "view_departments"
-                },
+            {
+                name: "Add employees",
+                value: "employees"
+            },
+            {
+                name: "View departments",
+                value: "view_departments"
+            },
 
-                {
-                    name: "View roles",
-                    value: "view_roles"
-                },
-                {
-                    name: "View employees",
-                    value: "view_employees"
-                },
+            {
+                name: "View roles",
+                value: "view_roles"
+            },
+            {
+                name: "View employees",
+                value: "view_employees"
+            },
 
-                {
-                    name: "Update employee roles",
-                    value: "update_roles"
-                },
-                {
-                    name: "Exit",
-                    value: "exit"
-                }
+            {
+                name: "Update employees roles",
+                value: "update_roles"
+            },
+            {
+                name: "Exit",
+                value: "exit"
+            }
 
-            ]
-        })
+        ]
+    }])
 
-    .then(function(answer) {
-        switch (answer.action) {
-            case "departments":
-                addDepartments();
-                break;
-
-            case "roles":
-                addRoles();
-                break;
-
-            case "employees":
-                addEmployees();
-                break;
-
-            case "View_departments":
-                viewDepartments();
-                break;
-
-            case "view_roles":
-                viewRoles();
-                break;
+    // .then(function(answer) {
+    switch (answer) {
+        case "departments":
+            return addDepartments();
 
 
-            case "view_employees":
-                viewEmployees();
-                break;
+        case "roles":
+            return addRoles();
 
 
-            case "update_roles":
-                updateRoles();
-                break;
+        case "employees":
+            return addEmployees();
 
-            case "exit":
-                connection.end();
-                break;
-        }
-    });
 
+        case "View_departments":
+            return viewDepartments();
+
+
+        case "view_roles":
+            return viewRoles();
+
+
+
+        case "view_employees":
+            return viewEmployees();
+
+
+
+        case "update_roles":
+            return updateRoles();
+
+
+            //case "exit":
+            //    connection.end();
+            //   break;
+    }
 }
+//);
+
+//}
 
 function viewDepartments() {
     const department = db.department()
@@ -105,9 +105,13 @@ function viewRoles() {
 
 }
 
-function viewEmployees() {
-    const employees = db.emploees()
+async function viewEmployees() {
+    console.log("WOOO")
+    const employees = await db.employees()
+    console.log("\n")
     console.table(employees)
+
+    //start();
 
 }
 
@@ -191,13 +195,13 @@ function addEmployees() {
         .prompt([{
                 name: "first_name",
                 type: "input",
-                message: "What is the first name of your new employee?"
+                message: "What is the first name of your new employees?"
             },
 
             {
                 name: "last_name",
                 type: "input",
-                message: "What is the last name of your new employee?"
+                message: "What is the last name of your new employees?"
             },
 
             {
@@ -226,7 +230,7 @@ function addEmployees() {
                 },
                 function(err) {
                     if (err) throw err;
-                    console.log("Employee was added successfully!");
+                    console.log("employees was added successfully!");
                     start();
                 }
             );
