@@ -6,11 +6,11 @@ class db {
     }
 
     employees() {
-        return this.connection.query("SELECT employees.first_name, employees.last_name, employees.category, employees.department_id FROM employees")
+        return this.connection.query("SELECT employees.first_name, employees.last_name, employees.role_id, employees.department_id FROM employees")
 
 
     }
-    createEmployees() {
+    createemployees() {
         console.log("Inserting a new employees...\n");
         return this.connection.query(
             "INSERT INTO employees SET ?", employees

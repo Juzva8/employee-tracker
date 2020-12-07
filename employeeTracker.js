@@ -1,6 +1,8 @@
 var mysql = require("mysql");
 var { prompt } = require("inquirer");
+var inquirer = require("inquirer");
 var db = require("./DB/DB");
+var connection = require("./DB/connection");
 require("console.table");
 
 start()
@@ -52,7 +54,6 @@ async function start() {
         ]
     }])
 
-    // .then(function(answer) {
     switch (answer) {
         case "department":
             return addDepartment();
@@ -63,7 +64,7 @@ async function start() {
 
 
         case "employees":
-            return addEmployees();
+            return addemployees();
 
 
         case "View_department":
@@ -76,12 +77,12 @@ async function start() {
 
 
         case "view_employees":
-            return viewEmployees();
+            return viewemployees();
 
 
 
         case "update_role":
-            return updateRole();
+            return update_role();
 
 
         case "exit":
@@ -96,7 +97,6 @@ async function viewDepartment() {
     console.table(department)
 }
 
-
 async function viewRole() {
     // try {
     const role = await db.role()
@@ -108,7 +108,7 @@ async function viewRole() {
 
 }
 
-async function viewEmployees() {
+async function viewemployees() {
 
     const employees = await db.employees()
     console.log("\n")
@@ -119,14 +119,16 @@ async function viewEmployees() {
 function addDepartment() {
     inquirer
         .prompt([{
-            name: "DepartmentName",
-            type: "input",
-            message: "What is the Department Name that you would like to add?"
-        }, ])
+                name: "departmentName",
+                type: "input",
+                message: "What is the Department Name that you would like to add?"
+            },
+
+        ])
         .then(function(answer) {
             connection.query(
                 "INSERT INTO department SET ?", {
-                    department: answer.DepartmentName,
+                    name: answer.departmentName,
                 },
                 function(err) {
                     if (err) throw err;
@@ -140,13 +142,13 @@ function addDepartment() {
 function addRole() {
     inquirer
         .prompt([{
-                name: "Title",
+                name: "title",
                 type: "input",
                 message: "What is the title you would like to add?"
             },
 
             {
-                name: "Salary",
+                name: "salary",
                 type: "input",
                 message: "What is the salary?",
                 validate: function(value) {
@@ -189,7 +191,7 @@ function addRole() {
         });
 }
 
-function addEmployees() {
+function addemployees() {
     inquirer
         .prompt([{
                 name: "first_name",
@@ -204,9 +206,9 @@ function addEmployees() {
             },
 
             {
-                name: "category",
+                name: "role_id",
                 type: "input",
-                message: "What category would you like to place it in?"
+                message: "What role id would you like to put it in?"
             },
             {
                 name: "category",
@@ -224,7 +226,7 @@ function addEmployees() {
                 "INSERT INTO employees SET ?", {
                     first_name: answer.first_name,
                     last_name: answer.last_name,
-                    category: answer.category,
+                    role_id: answer.role_id,
                     department_id: answer.department_id,
                 },
                 function(err) {
@@ -234,4 +236,40 @@ function addEmployees() {
                 }
             );
         });
+
+    function update_role() {
+
+        var employees = db.employees()
+        var employeeList = employees.map(({ id, first_name, last_name, role_id, department_id }) => ({
+            name: `${first_name, last_name, role_id, department_id }`,
+            value: id
+        }))
+
+        inquirer
+            .prompt([{
+                    name: "employees",
+                    type: "list",
+                    message: "Which employee you would like to update?",
+                    choices: employeeList
+                },
+                {
+                    name: "role_id",
+                    type: "input",
+                    message: "What is the new role ID?"
+                },
+
+            ])
+            .then(function(answer) {
+                connection.query(
+                    "UPDATE employees SET ? WHERE ? ", {
+                        name: answer
+                    },
+                    function(err) {
+                        if (err) throw err;
+                        console.log("Your employee was updated successfully!");
+                        start();
+                    }
+                );
+            });
+    }
 }
