@@ -6,7 +6,7 @@ class db {
     }
 
     employees() {
-        return this.connection.query("SELECT employees.first_name, employees.last_name, employees.role_id, employees.department_id FROM employees")
+        return this.connection.query("SELECT employees.first_name, employees.last_name, employees.role_id, employees.manager_id FROM employees")
 
 
     }
@@ -18,7 +18,7 @@ class db {
         );
     }
     role() {
-        return this.connection.query("SELECT role.title, role.salary, role.category, role.role_id, role.manager_id FROM role")
+        return this.connection.query("SELECT role.title, role.salary, role.department_id  FROM role")
 
 
     }

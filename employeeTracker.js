@@ -82,7 +82,7 @@ async function start() {
 
 
         case "update_role":
-            return update_role();
+            return updateRole();
 
 
         case "exit":
@@ -95,16 +95,15 @@ async function viewDepartment() {
     const department = await db.department()
     console.log("\n")
     console.table(department)
+    start()
 }
 
 async function viewRole() {
-    // try {
+
     const role = await db.role()
     console.log("\n")
     console.table(role)
-        // } catch (err) {
-        // console.error(err)
-        // }
+    start()
 
 }
 
@@ -113,7 +112,7 @@ async function viewemployees() {
     const employees = await db.employees()
     console.log("\n")
     console.table(employees)
-
+    start()
 }
 
 function addDepartment() {
@@ -157,20 +156,11 @@ function addRole() {
                     }
                     return false;
                 }
-            }, {
-                name: "category",
-                type: "input",
-                message: "What category would you like to place it in?"
             },
             {
-                name: "role_id",
+                name: "department_id",
                 type: "input",
-                message: "What is it's role id?"
-            },
-            {
-                name: "manager_id",
-                type: "input",
-                message: "What is it's manager's id?"
+                message: "What is it's department id?"
             },
         ])
         .then(function(answer) {
@@ -178,9 +168,7 @@ function addRole() {
                 "INSERT INTO role SET ?", {
                     title: answer.title,
                     salary: answer.salary,
-                    category: answer.category,
-                    role_id: answer.role_id,
-                    manager_id: answer.manager_id
+                    department_id: answer.department_id
                 },
                 function(err) {
                     if (err) throw err;
@@ -190,8 +178,7 @@ function addRole() {
             );
         });
 }
-
-function addemployees() {
+async function addemployees() {
     inquirer
         .prompt([{
                 name: "first_name",
@@ -211,12 +198,7 @@ function addemployees() {
                 message: "What role id would you like to put it in?"
             },
             {
-                name: "category",
-                type: "input",
-                message: "What is it's category?"
-            },
-            {
-                name: "department_id",
+                name: "manager_id",
                 type: "input",
                 message: "What is it's department id?"
             },
@@ -227,7 +209,7 @@ function addemployees() {
                     first_name: answer.first_name,
                     last_name: answer.last_name,
                     role_id: answer.role_id,
-                    department_id: answer.department_id,
+                    manager_id: answer.manager_id
                 },
                 function(err) {
                     if (err) throw err;
@@ -236,40 +218,38 @@ function addemployees() {
                 }
             );
         });
+}
 
-    function update_role() {
+async function updateRole() {
 
-        var employees = db.employees()
-        var employeeList = employees.map(({ id, first_name, last_name, role_id, department_id }) => ({
-            name: `${first_name, last_name, role_id, department_id }`,
-            value: id
-        }))
+    var employees = await db.employees()
+    var employeeList = employees.map(({ id, first_name, last_name, role_id, manager_id }) => ({
+        name: `${first_name, last_name, role_id, manager_id }`,
+        value: id
+    }))
+    var { employeeId } = await prompt([{
+        type: "list",
+        name: "employeeId",
+        message: "Which employee's role would you like to update?",
+        choices: employeeList
+    }]);
 
-        inquirer
-            .prompt([{
-                    name: "employees",
-                    type: "list",
-                    message: "Which employee you would like to update?",
-                    choices: employeeList
-                },
-                {
-                    name: "role_id",
-                    type: "input",
-                    message: "What is the new role ID?"
-                },
+    var roleList = await db.viewRole();
 
-            ])
-            .then(function(answer) {
-                connection.query(
-                    "UPDATE employees SET ? WHERE ? ", {
-                        name: answer
-                    },
-                    function(err) {
-                        if (err) throw err;
-                        console.log("Your employee was updated successfully!");
-                        start();
-                    }
-                );
-            });
-    }
+    var roleChoices = roleList.map(({ id, title }) => ({
+        name: title,
+        value: id
+    }));
+
+    var { role_id } = await prompt([{
+        type: "list",
+        name: "role_id",
+        message: "Which role do you want to assign the selected employee?",
+        choices: roleChoices
+    }]);
+    await db.updateEmployeeRole(employeeId, role_id);
+
+    console.log("Updated employee's role");
+
+    start();
 }
