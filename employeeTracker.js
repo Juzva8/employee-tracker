@@ -223,8 +223,8 @@ async function addemployees() {
 async function updateRole() {
 
     var employees = await db.employees()
-    var employeeList = employees.map(({ id, first_name, last_name, role_id, manager_id }) => ({
-        name: `${first_name, last_name, role_id, manager_id }`,
+    var employeeList = employees.map(({ id, first_name, last_name }) => ({
+        name: `${first_name, last_name }`,
         value: id
     }))
     var { employeeId } = await prompt([{
@@ -234,7 +234,7 @@ async function updateRole() {
         choices: employeeList
     }]);
 
-    var roleList = await db.viewRole();
+    var roleList = await db.role();
 
     var roleChoices = roleList.map(({ id, title }) => ({
         name: title,
@@ -247,7 +247,7 @@ async function updateRole() {
         message: "Which role do you want to assign the selected employee?",
         choices: roleChoices
     }]);
-    await db.updateEmployeeRole(employeeId, role_id);
+    await db.updateRole(employeeId, role_id);
 
     console.log("Updated employee's role");
 
