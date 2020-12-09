@@ -30,7 +30,7 @@ async function start() {
             },
             {
                 name: "View department",
-                value: "view_department"
+                value: "viewDepartment"
             },
 
             {
@@ -67,7 +67,7 @@ async function start() {
             return addemployees();
 
 
-        case "View_department":
+        case "viewDepartment":
             return viewDepartment();
 
 
@@ -103,7 +103,7 @@ async function viewRole() {
 async function viewDepartment() {
     const department = await db.department()
     console.log("\n")
-    console.table(department)
+    console.log(department)
     start()
 }
 
