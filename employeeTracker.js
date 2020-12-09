@@ -91,13 +91,6 @@ async function start() {
     }
 };
 
-async function viewDepartment() {
-    const department = await db.department()
-    console.log("\n")
-    console.table(department)
-    start()
-}
-
 async function viewRole() {
 
     const role = await db.role()
@@ -105,6 +98,13 @@ async function viewRole() {
     console.table(role)
     start()
 
+}
+
+async function viewDepartment() {
+    const department = await db.department()
+    console.log("\n")
+    console.table(department)
+    start()
 }
 
 async function viewemployees() {

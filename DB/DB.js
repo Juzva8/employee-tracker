@@ -29,6 +29,18 @@ class db {
 
         );
     }
+
+    updateRole() {
+
+        console.log("Inserting a new role...\n");
+        return this.connection.query(
+            "UPDATE INTO role SET ?", {
+                role_id: role
+            },
+
+        );
+    }
+
     department() {
         return this.connection.query("SELECT department.name FROM department")
 
@@ -40,5 +52,11 @@ class db {
 
         );
     }
+    updateRole(employees, role_id) {
+        return this.connection.query(
+            "UPDATE employees SET role_id = ? WHERE id = ?", [role_id, employees]
+        );
+    }
+
 }
 module.exports = new db(connection)
