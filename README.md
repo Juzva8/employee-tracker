@@ -21,6 +21,12 @@
 ## Usage
 
 navigate to folder where file is located using your terminal and run comand node employeetracker.js
+
+## Link to deployed version of the app
+
+ https://git.heroku.com/fierce-chamber-65183.git
+ https://github.com/Juzva8/employee-tracker
+
 ## License
   This project is licensed under the Boost Software License 1.0 license.
 ```
